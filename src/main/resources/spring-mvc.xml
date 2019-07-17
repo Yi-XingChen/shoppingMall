@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 扫描所有加了@Controller注解的类，加入到Spring MVC容器中进行请求转发-->
+    <context:component-scan base-package="com.yxc.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 处理器映射器 -->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+    <!-- 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 引入JSTL的视图类 -->
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <!-- 视图前缀 -->
+        <property name="prefix">
+            <value>/page/</value>
+        </property>
+        <!-- 视图后缀 -->
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+    <!-- 配置自定义参数绑定器 -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!-- 加入自定义参数绑定器 -->
+        <property name="converters">
+            <set>
+                <!-- 加入自定义的日期类型转换器 -->
+                <bean class="com.yxc.converter.CustomDateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!-- 使用注解的方式进行参数校验（可选）-->
+    <!-- 引入静态资源 -->
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/image/**" location="/image/"/>
+
+    <!-- 上传文件相关配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 请求的编码格式 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!-- 文件大小限制(5MB) -->
+        <property name="maxUploadSize" value="5242880"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="40960"/>
+    </bean>
+
+</beans>

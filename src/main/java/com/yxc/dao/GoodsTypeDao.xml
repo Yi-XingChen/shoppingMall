@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，值是对应专业的接口路径 -->
+<mapper namespace="com.yxc.dao.GoodsTypeDao">
+    <!-- 自定义结果集 -->
+    <resultMap id="goodsTypeMap" type="com.yxc.bean.GoodsType">
+        <!-- property：实体类中定义的对象的名称；column:数据库表中的字段名称 -->
+        <id property="goodsTypeId" column="goods_type_id" javaType="java.lang.Integer"/>
+        <result property="goodsTypeName" column="goods_type_name" javaType="java.lang.String"/>
+        <result property="pId" column="pid" javaType="java.lang.Integer"/>
+        <result property="goodsTypeDesc" column="goods_type_desc" javaType="java.lang.String"/>
+        <result property="href" column="href" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 查询所有商品类信息 -->
+    <select id="listAllGoodsType" resultMap="goodsTypeMap">
+        select * from goods_type order by goods_type_id
+    </select>
+
+    <!-- 通过父id查询其下的商品类 -->
+    <select id="listGoodsTypeByPId" resultMap="goodsTypeMap" parameterType="int">
+        select * from goods_type where pid=#{pId} order by goods_type_id
+    </select>
+
+    <!-- 删除某个商品类 -->
+    <delete id="deleteGoodsType" parameterType="int">
+        delete from  goods_type where goods_type_id=#{goodsTypeId}
+    </delete>
+
+    <!-- 添加新的商品类 -->
+    <insert id="addGoodsType" parameterType="GoodsType">
+        insert into goods_type(goods_type_name,pid,goods_type_desc,href)
+            values(#{goodsTypeName},#{pId},#{goodsTypeDesc},#{href})
+    </insert>
+
+    <!-- 更新商品类信息 -->
+    <update id="editGoodsType" parameterType="GoodsType">
+        update goods_type set goods_type_name=#{goodsTypeName},goods_type_desc=#{goodsTypeDesc},href=#{href}
+            where goods_type_id=#{goodsTypeId}
+    </update>
+
+    <!-- 查询商品类表的总条数 -->
+    <select id="selectGoodsTypeTotal" resultType="int">
+        SELECT COUNT(goods_type_id) FROM goods_type
+    </select>
+
+    <!-- 分页查询商品类型信息 -->
+    <select id="selectPageGoodsType" resultMap="goodsTypeMap" parameterType="int">
+        SELECT * FROM goods_type ORDER BY goods_type_id LIMIT ${param1},${param2}
+    </select>
+
+    <!-- 通过商品类型id查询商品类型信息 -->
+    <select id="selectByGoodsTypeId" resultMap="goodsTypeMap" parameterType="int">
+        SELECT * FROM goods_type WHERE goods_type_id=#{goodsTypeId}
+    </select>
+
+</mapper>

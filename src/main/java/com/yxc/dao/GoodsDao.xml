@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，值是对应专业的接口路径 -->
+<mapper namespace="com.yxc.dao.GoodsDao">
+    <!-- 自定义结果集 -->
+    <resultMap id="goodsMap" type="com.yxc.bean.Goods">
+        <!-- property：实体类中定义的对象的名称；column:数据库表中的字段名称 -->
+        <id property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="goodsName" column="goods_name" javaType="java.lang.String"/>
+        <result property="goodsDesc" column="goods_desc" javaType="java.lang.String"/>
+        <result property="goodsPrice" column="goods_price" javaType="java.lang.Integer"/>
+        <result property="goodsImg" column="goods_img" javaType="java.lang.String"/>
+        <result property="goodsTypeId" column="goods_type_id" javaType="java.lang.Integer"/>
+        <result property="goodsTypeName" column="goods_type_name" javaType="java.lang.String"/>
+        <result property="flag" column="flag" javaType="java.lang.Integer"/>
+        <result property="stock" column="stock" javaType="java.lang.Integer"/>
+        <result property="recommend" column="recommend" javaType="java.lang.Integer"/>
+        <result property="goodsHref" column="goods_href" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 查询所有商品信息 -->
+    <select id="listAllGoods" resultMap="goodsMap">
+        SELECT * FROM goods ORDER BY id
+    </select>
+
+    <!-- 查询某个商品类型下的所有商品信息(用于点击轮播图左侧商品类时跳转的页面) -->
+    <select id="listGoodsByGoodsTypeId" resultMap="goodsMap">
+        select * from goods where goods_type_id=#{goodsTypeId} order by id
+    </select>
+
+    <!-- 添加新商品 -->
+    <insert id="addGoods" parameterType="Goods">
+        INSERT INTO goods(goods_name,goods_desc,goods_price,goods_img,goods_type_id,stock,flag,recommend,goods_href)
+            VALUES(#{goodsName},#{goodsDesc},#{goodsPrice},#{goodsImg},#{goodsTypeId},
+            #{stock},#{flag},#{recommend},#{goodsHref})
+    </insert>
+
+    <!-- 更新商品信息 -->
+    <update id="editGoods" parameterType="Goods">
+          UPDATE goods SET goods_name=#{goodsName},goods_desc=#{goodsDesc},goods_price=#{goodsPrice},
+              goods_img=#{goodsImg},stock=#{stock},goods_href=#{goodsHref} WHERE id=#{id}
+    </update>
+
+    <!-- 分页查询商品信息 -->
+    <select id="selectPageGoods" resultMap="goodsMap" parameterType="int">
+        SELECT g.*,gt.goods_type_name FROM goods g,goods_type gt WHERE g.goods_type_id=gt.goods_type_id
+            ORDER BY id DESC LIMIT #{param1},#{param2}
+    </select>
+
+    <!-- 上下架商品 -->
+    <update id="upDownGoods" parameterType="int">
+        UPDATE goods SET flag=#{arg1} WHERE id=#{arg0}
+    </update>
+
+    <!-- 加减库存 -->
+    <update id="addStock" parameterType="int">
+        UPDATE goods SET stock=stock+#{arg1} WHERE id=#{arg0}
+    </update>
+
+    <!-- 推荐、取消推荐商品 -->
+    <update id="recommendGoods" parameterType="int">
+        UPDATE goods SET recommend=#{arg1} WHERE id=#{arg0}
+    </update>
+
+    <!-- 查询所有被推荐的商品 -->
+    <select id="listAllGoodsRecommend" resultMap="goodsMap">
+        SELECT * FROM goods WHERE recommend=0 ORDER BY id DESC
+    </select>
+
+    <!-- 通过商品类型id查询某类的所有商品 -->
+    <select id="listAllGoodsByGoodsTypeId" resultMap="goodsMap" parameterType="int">
+        SELECT * FROM goods WHERE goods_type_id=#{goodsTypeId} ORDER BY id DESC
+    </select>
+
+    <!-- 通过关键字搜索商品 -->
+    <select id="listGoodsByKeyword" resultMap="goodsMap" parameterType="String">
+        SELECT * FROM goods WHERE goods_name LIKE "%"#{keyword}"%"
+    </select>
+
+    <!-- 通过商品id查询该商品信息 -->
+    <select id="selectGoodsById" resultMap="goodsMap" parameterType="int">
+        SELECT * FROM goods WHERE id=#{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,11 @@
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:0 ] - [ DEBUG ]  Logging Provider: org.jboss.logging.Log4jLoggerProvider
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:0 ] - [ INFO ]  HV000001: Hibernate Validator 5.4.1.Final
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:47 ] - [ DEBUG ]  Cannot find javax.persistence.Persistence on classpath. Assuming non JPA 2 environment. All properties will per default be traversable.
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:78 ] - [ DEBUG ]  Setting custom MessageInterpolator of type org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:78 ] - [ DEBUG ]  Setting custom ConstraintValidatorFactory of type org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:78 ] - [ DEBUG ]  Setting custom ParameterNameProvider of type org.springframework.validation.beanvalidation.LocalValidatorFactoryBean$1
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:94 ] - [ DEBUG ]  Trying to load META-INF/validation.xml for XML based Validator configuration.
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:94 ] - [ DEBUG ]  Trying to load META-INF/validation.xml via user class loader
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:94 ] - [ DEBUG ]  Trying to load META-INF/validation.xml via TCCL
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:94 ] - [ DEBUG ]  Trying to load META-INF/validation.xml via Hibernate Validator's class loader
+2019-06-10 12:24:00  [ RMI TCP Connection(5)-127.0.0.1:94 ] - [ DEBUG ]  No META-INF/validation.xml found. Using annotation based configuration only.

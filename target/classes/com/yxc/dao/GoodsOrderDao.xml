@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，值是对应专业的接口路径 -->
+<mapper namespace="com.yxc.dao.GoodsOrderDao">
+    <!-- 自定义结果集 -->
+    <resultMap id="goodsOrderMap" type="com.yxc.bean.GoodsOrder">
+        <!-- property：实体类中定义的对象的名称；column:数据库表中的字段名称 -->
+        <id property="orderId" column="order_id" javaType="java.lang.Integer"/>
+        <result property="orderCost" column="order_cost" javaType="java.lang.Float"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"/>
+        <result property="status" column="order_status" javaType="java.lang.Integer"/>
+        <result property="userId" column="user_id" javaType="java.lang.Integer"/>
+        <result property="goodsId" column="goods_id" javaType="java.lang.Integer"/>
+        <result property="count" column="count" javaType="java.lang.Integer"/>
+        <result property="createTime" column="create_time" javaType="java.util.Date"/>
+        <result property="paymentTime" column="payment_time" javaType="java.util.Date"/>
+        <result property="deliveryTime" column="delivery_time" javaType="java.util.Date"/>
+        <result property="goodsName" column="goods_name" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 创建订单 -->
+    <insert id="addGoodsOrder" parameterType="GoodsOrder">
+        INSERT INTO goods_order(order_cost,order_no,order_status,user_id,goods_id,count,create_time)
+          VALUES(#{orderCost},#{orderNo},#{status},#{userId},#{goodsId},#{count},#{createTime})
+    </insert>
+
+    <!-- 分页查询所有订单 -->
+    <select id="listPageGoodsOrder" resultMap="goodsOrderMap" parameterType="int">
+        SELECT gor.*,g.goods_name FROM goods_order gor,goods g WHERE g.id=gor.goods_id ORDER BY order_id DESC LIMIT #{param1},#{param2}
+    </select>
+
+    <!-- 查询所有订单-->
+    <select id="listAllGoodsOrder" resultMap="goodsOrderMap">
+        SELECT * FROM goods_order ORDER BY order_id DESC
+    </select>
+
+    <!-- 按订单状态分页查询订单 -->
+    <select id="selectGoodsOrderByStatus" resultMap="goodsOrderMap" parameterType="int">
+        SELECT gor.*,g.goods_name FROM goods_order gor,goods g WHERE g.id=gor.goods_id AND order_status=#{status} ORDER BY order_id DESC LIMIT #{nextNum},#{pageSize}
+    </select>
+
+    <!-- 查询某订单状态下有多少条 -->
+    <select id="selectCountOrderByStatus" parameterType="int" resultType="int">
+        SELECT COUNT(order_id) FROM goods_order WHERE order_status=#{status}
+    </select>
+
+    <!-- 分页查询某会员在某状态下的订单 -->
+    <select id="selectPageOrdersByStatusAndUserId" resultMap="goodsOrderMap" parameterType="int">
+        SELECT gor.*,g.goods_name FROM goods_order gor,goods g WHERE g.id=gor.goods_id AND order_status=#{status} AND user_id=#{userId} ORDER BY order_id DESC LIMIT #{nextNum},#{pageSize}
+    </select>
+
+    <!-- 查询某会员在某订单状态下有多少条 -->
+    <select id="selectCountOrderByStatusAndUserId" parameterType="int" resultType="int">
+        SELECT COUNT(order_id) FROM goods_order WHERE order_status=#{status} AND user_id=#{userId}
+    </select>
+
+    <!-- 更改订单状态 -->
+    <update id="editOrderStatus" parameterType="int">
+        UPDATE goods_order SET order_status=#{status} WHERE order_id=#{orderId}
+    </update>
+
+    <!-- 查询某会员的所有订单 -->
+    <select id="selectPageOrdersByUserId" resultMap="goodsOrderMap" parameterType="int">
+        SELECT gor.*,g.goods_name FROM goods_order gor,goods g WHERE g.id=gor.goods_id AND user_id=#{userId} ORDER BY order_id DESC LIMIT #{nextNum},#{pageSize}
+    </select>
+
+    <!-- 查询某会员的所有订单的总条数 -->
+    <select id="selectCountOrderByUserId" parameterType="int" resultType="int">
+        SELECT COUNT(order_id) FROM goods_order WHERE user_id=#{userId}
+    </select>
+
+    <!-- 添加付款时间 -->
+    <update id="editPaymentTime" parameterType="GoodsOrder" >
+        UPDATE goods_order SET payment_time=#{paymentTime} WHERE order_id=#{orderId}
+    </update>
+
+    <!-- 添加发货时间 -->
+    <update id="editDeliveryTime" parameterType="GoodsOrder" >
+        UPDATE goods_order SET delivery_time=#{deliveryTime} WHERE order_id=#{orderId}
+    </update>
+
+</mapper>

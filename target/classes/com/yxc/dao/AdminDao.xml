@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，值是对应专业的接口路径 -->
+<mapper namespace="com.yxc.dao.AdminDao">
+    <!-- 自定义结果集 -->
+    <resultMap id="adminMap" type="com.yxc.bean.Admin">
+        <!-- property：实体类中定义的对象的名称；column:数据库表中的字段名称 -->
+        <id property="adminId" column="admin_id" javaType="java.lang.Integer"/>
+        <result property="adminName" column="admin_name" javaType="java.lang.String"/>
+        <result property="adminPassword" column="admin_password" javaType="java.lang.String"/>
+        <result property="adminPhoto" column="admin_photo" javaType="java.lang.String"/>
+        <result property="adminPhone" column="admin_phone" javaType="java.lang.String"/>
+    </resultMap>
+
+    <!-- 查询所有的会员信息 -->
+    <select id="listAllAdmin" resultMap="adminMap">
+        SELECT * FROM admin ORDER BY admin_id DESC
+    </select>
+
+    <!-- 修改管理员信息 -->
+    <update id="editAdmin" parameterType="Admin">
+         UPDATE admin SET admin_name=#{adminName},admin_password=#{adminPassword},admin_photo=#{adminPhoto},
+                  admin_phone=#{adminPhone} WHERE admin_id=#{adminId}
+    </update>
+
+    <!-- 新增管理员 -->
+    <insert id="addAdmin" parameterType="Admin">
+        INSERT INTO admin(admin_name,admin_password,admin_photo,admin_phone)
+	          VALUES(#{adminName},#{adminPassword},#{adminPhoto},#{adminPhone})
+    </insert>
+
+    <!-- 登录后台 -->
+    <select id="login" resultMap="adminMap">
+        SELECT * FROM admin WHERE admin_name=#{adminName} AND admin_password=#{adminPassword}
+    </select>
+
+    <!-- 管理员名字重复性校验 -->
+    <select id="findAdminName" resultType="int" parameterType="String">
+        SELECT COUNT(*) FROM admin WHERE admin_name=#{adminName}
+    </select>
+
+</mapper>

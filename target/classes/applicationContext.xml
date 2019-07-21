@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+    <!-- 扫描项目中com.yxc包下的类，有component注解的会被自动加入到spring容器中 -->
+    <context:component-scan base-package="com.yxc.*">
+        <!-- 不扫描注解为@Controller的类 -->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 扫描spring容器中所有加了@Aspect的bean，为其创建切面代理-->
+    <aop:aspectj-autoproxy/>
+
+    <!-- 引入jdbc数据库配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:jdbc.properties"/>
+    </bean>
+
+    <!-- 配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </bean>
+
+    <!-- 整合myBatis框架 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 加入数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 别名 -->
+        <property name="typeAliasesPackage" value="com.yxc.bean"/>
+        <!-- 扫描myBatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!-- 扫描mapper.java -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yxc.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置事务 -->
+    <tx:advice id="allAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED" read-only="false" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="select*" isolation="DEFAULT" propagation="REQUIRED" read-only="true" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="list*" isolation="DEFAULT" propagation="REQUIRED" read-only="true" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="find*" isolation="DEFAULT" propagation="REQUIRED" read-only="true" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="edit*" isolation="DEFAULT" propagation="REQUIRED" read-only="false" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="delete*" isolation="DEFAULT" propagation="REQUIRED" read-only="false" timeout="5"
+                       rollback-for="java.lang.Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <!-- 定义切点 -->
+        <aop:pointcut id="actionPointCut" expression="execution(* com.yxc.dao.*.*(..))"/>
+        <!-- 定义通知 -->
+        <aop:advisor advice-ref="allAdvice" pointcut-ref="actionPointCut"/>
+    </aop:config>
+
+</beans>

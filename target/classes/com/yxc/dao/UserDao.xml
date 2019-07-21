@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，值是对应专业的接口路径 -->
+<mapper namespace="com.yxc.dao.UserDao">
+    <!-- 自定义结果集 -->
+    <resultMap id="userMap" type="com.yxc.bean.User">
+        <!-- property：实体类中定义的对象的名称；column:数据库表中的字段名称 -->
+        <id property="userId" column="user_id" javaType="java.lang.Integer"/>
+        <result property="userName" column="user_name" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="phone" column="phone" javaType="java.lang.String"/>
+        <result property="sex" column="sex" javaType="java.lang.Integer"/>
+        <result property="age" column="age" javaType="java.lang.Integer"/>
+        <result property="address" column="address" javaType="java.lang.String"/>
+        <result property="money" column="money" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <!-- 查询所有会员信息 -->
+    <select id="listAllUser" resultMap="userMap">
+        select * from user order by user_id
+    </select>
+
+    <!-- 分页查询会员信息 -->
+    <select id="selectPageUser" resultMap="userMap">
+        SELECT * FROM user ORDER BY user_id LIMIT ${param1},${param2}
+    </select>
+
+    <!-- 删除会员信息 -->
+    <delete id="deleteUser" parameterType="int">
+        delete from user where user_id=#{userId}
+    </delete>
+
+    <!-- 修改会员信息 -->
+    <update id="editUser" parameterType="User">
+        UPDATE user SET user_name=#{userName},password=#{password},phone=#{phone},
+            address=#{address},money=#{money} WHERE user_id=#{userId}
+    </update>
+
+    <!-- 注册新会员 -->
+    <insert id="addUser" parameterType="User">
+        INSERT INTO user(user_name,password,phone,sex,age,address,money)
+            VALUES(#{userName},#{password},#{phone},#{sex},#{age},#{address},#{money})
+    </insert>
+
+    <!-- 会员登录 -->
+    <select id="loginUser" resultMap="userMap">
+        SELECT * FROM user WHERE user_name=#{userName} AND password=#{password}
+    </select>
+
+    <!-- 扣余额 -->
+    <update id="editMoney" parameterType="int">
+        UPDATE user SET money=money-#{arg0} WHERE user_id=#{arg1}
+    </update>
+
+    <!-- 会员名的重复性校验 -->
+    <select id="findUserName" resultMap="userMap" parameterType="String">
+        SELECT * FROM user WHERE user_name=#{userName}
+    </select>
+
+</mapper>

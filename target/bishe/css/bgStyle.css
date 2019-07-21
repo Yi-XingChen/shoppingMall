@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+img {
+    border: none;
+    vertical-align: middle;
+}
+
+a {
+    border: none;
+    text-decoration: none;
+    color: #000;
+}
+
+.border {
+    border: 1px solid red;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.w {
+    width: 1226px;
+    margin: 0 auto;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.ml40 {
+    margin-left: 40px;
+}
+
+.mr40 {
+    margin-right: 40px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.border2 {
+    border: 2px solid #ff6700;
+}
+
+.ft20 {
+    font-size: 20px;
+}
+
+.ftbc {
+    color: #ff6700;
+    font-weight: bold;
+}
+
+.pr {
+    padding-right: 40px;
+}
+
+.h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.poRe {
+    position: relative;
+}
+
+.w2h1 {
+    width: 200px;
+    height: 100px;
+}
+
+/*头部*/
+header {
+    width: 100%;
+    height: 100px;
+}
+
+/*底部*/
+footer {
+    width: 100%;
+    height: 120px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 12px;
+    background: rgb(250, 250, 250);
+    padding: 30px 0;
+}
+
+/*后台登录页*/
+.middle {
+    width: 100%;
+    height: 60%;
+    background: url("../image/admin-bg.jpg") no-repeat center;
+}
+
+.adminForm {
+    background-color: #ffffff88;
+    margin-top: 30px;
+    border-radius: 4px;
+    padding: 10px 0 18px 20px;
+}
+
+.adminForm .login_top {
+    margin: 10px 0;
+}
+
+.adminForm .login_top .left {
+    height: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.adminForm .login {
+    width: 240px;
+    height: 44px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#verifyCode {
+    position: absolute;
+    left: 140px;
+    top: 3px;
+}
+
+/*管理员信息维护*/
+.adminCenter {
+    width: 100%;
+    height: 80%;
+    background: url("../image/adminCenter-bg.jpg");
+}
+
+.headPhoto {
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+}
